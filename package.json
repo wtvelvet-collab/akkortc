@@ -1,0 +1,1 @@
+{"name": "akkortc", "version": "1.0.0", "description": "A project using Ably SDK", "main": "index.js", "scripts": {}, "dependencies": {"ably": "latest"}}
