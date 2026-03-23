@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Chat App</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; height: 100vh; margin: 0; }
+        #chat-container { display: flex; flex: 1; border: 1px solid #ccc; }
+        #user-list, #chat-box { width: 50%; padding: 10px; }
+        #user-list { background: #f4f4f4; border-right: 1px solid #ccc; }
+        #chat-box { display: flex; flex-direction: column; }
+        #messages { flex: 1; overflow-y: auto; }
+        .message { margin: 5px 0; }
+        #input-area { display: flex; }
+        #message-input { flex: 1; padding: 10px; }
+        #send-button { padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        #send-button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="user-list">
+            <h2>Users</h2>
+            <div id="users"></div>
+        </div>
+        <div id="chat-box">
+            <h2>Chat</h2>
+            <div id="messages"></div>
+            <div id="input-area">
+                <input id="message-input" type="text" placeholder="Type your message..." />
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.ably.com/lib/ably.min.js"></script>
+    <script>
+        const client = new Ably.Realtime('YOUR_ABLY_API_KEY');
+        const channel = client.channels.get('chat');
+
+        channel.subscribe('message', (msg) => {
+            const msgElement = document.createElement('div');
+            msgElement.className = 'message';
+            msgElement.textContent = msg.data;
+            document.getElementById('messages').appendChild(msgElement);
+        });
+
+        document.getElementById('send-button').addEventListener('click', () => {
+            const input = document.getElementById('message-input');
+            channel.publish('message', input.value);
+            input.value = '';
+        });
+    </script>
+</body>
+</html>
