@@ -1,0 +1,8 @@
+[[redirects]]
+  status = 200
+  force = true
+  conditions = { Fields = { the_field = "the_value" } }
+
+[build]
+  publish = "build"
+  command = "npm run build"
